@@ -27,7 +27,7 @@ jobs:
         run: uv sync
       
       - name: Generate protobuf files
-        run: protoc -Iproto --python_out=contracts --mypy_out=contracts proto/*.proto
+        run: uv run protoc -Iproto --python_out=contracts --mypy_out=contracts proto/*.proto
       
       - name: Build distribution
         run: uv build
