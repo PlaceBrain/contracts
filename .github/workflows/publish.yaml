@@ -22,9 +22,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y protobuf-compiler
+
+      - name: Install Python dependencies
+        run: uv sync
       
       - name: Generate protobuf files
-        run: protoc --python_out=gen --mypy_out=gen proto/auth.proto
+        run: protoc -Iproto --python_out=contracts --mypy_out=contracts proto/*.proto
       
       - name: Build distribution
         run: uv build
