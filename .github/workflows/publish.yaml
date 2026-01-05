@@ -1,0 +1,35 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      
+      - uses: astral-sh/setup-uv@v3
+      
+      - name: Install protoc
+        run: |
+          apt-get update
+          apt-get install -y protobuf-compiler
+      
+      - name: Generate protobuf files
+        run: protoc --python_out=gen --mypy_out=gen proto/auth.proto
+      
+      - name: Build distribution
+        run: uv build
+      
+      - name: Publish to PyPI
+        run: uv publish
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
