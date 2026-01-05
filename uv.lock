@@ -3,8 +3,21 @@ revision = 3
 requires-python = ">=3.13"
 
 [[package]]
-name = "contracts"
-version = "0.1.2"
+name = "mypy-protobuf"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "protobuf" },
+    { name = "types-protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f9/95/afd552608fc8b112dd39c99d22ddb1b2da147dfd58c8c74c919e14ae99cd/mypy_protobuf-4.0.0.tar.gz", hash = "sha256:e200c833645dcfdfe8aa47f4a33d3a4b01b6be5b9a58ddbfc441329d5b679274", size = 29538, upload-time = "2025-12-21T05:35:20.57Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cd/78/44d4cfdc39d61a606b8747ca9542fc4f91477098c911295e45af17b1d72a/mypy_protobuf-4.0.0-py3-none-any.whl", hash = "sha256:b859286891c51e420aef711b3e6616444e81c64723c12110d1dda809fad105f6", size = 18609, upload-time = "2025-12-21T05:35:18.956Z" },
+]
+
+[[package]]
+name = "placebrain-contracts"
+version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "protobuf" },
@@ -20,19 +33,6 @@ requires-dist = [{ name = "protobuf", specifier = ">=6.33.2" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "mypy-protobuf", specifier = ">=4.0.0" }]
-
-[[package]]
-name = "mypy-protobuf"
-version = "4.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "protobuf" },
-    { name = "types-protobuf" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f9/95/afd552608fc8b112dd39c99d22ddb1b2da147dfd58c8c74c919e14ae99cd/mypy_protobuf-4.0.0.tar.gz", hash = "sha256:e200c833645dcfdfe8aa47f4a33d3a4b01b6be5b9a58ddbfc441329d5b679274", size = 29538, upload-time = "2025-12-21T05:35:20.57Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cd/78/44d4cfdc39d61a606b8747ca9542fc4f91477098c911295e45af17b1d72a/mypy_protobuf-4.0.0-py3-none-any.whl", hash = "sha256:b859286891c51e420aef711b3e6616444e81c64723c12110d1dda809fad105f6", size = 18609, upload-time = "2025-12-21T05:35:18.956Z" },
-]
 
 [[package]]
 name = "protobuf"
