@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "placebrain-contracts"
-version = "0.1.0"
+version = "0.1.1"
 description = "Protocol buffer contracts package"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -17,5 +17,7 @@ packages = ["placebrain_contracts"]
 
 [dependency-groups]
 dev = [
+    "protobuf>=6.33.2",
+    "grpcio-tools>=1.76.0",
     "mypy-protobuf>=4.0.0",
 ]
