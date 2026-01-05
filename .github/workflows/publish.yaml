@@ -22,22 +22,23 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y protobuf-compiler
-
+          which protoc
+          protoc --version
+      
       - name: Install Python dependencies
         run: uv sync
       
-      - name: Generate protobuf files
-        run: uv run python -m grpc_tools.protoc \
-              -Iproto \
-              --python_out=placebrain_contracts \
-              --grpc_python_out=placebrain_contracts \
-              --mypy_out=placebrain_contracts \
-              proto/auth.proto
-
-      - name: Build distribution
-        run: uv build
+      - name: Debug - Check grpc_tools
+        run: |
+          uv run python -c "import grpc_tools.protoc; print(grpc_tools.protoc.__file__)"
+          uv run which python
       
-      - name: Publish to PyPI
-        run: uv publish
-        env:
-          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      - name: Generate protobuf files
+        run: |
+          set -x
+          uv run python -m grpc_tools.protoc \
+            -Iproto \
+            --python_out=placebrain_contracts \
+            --grpc_python_out=placebrain_contracts \
+            proto/auth.proto
+          set +x
