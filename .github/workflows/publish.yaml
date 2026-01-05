@@ -20,8 +20,8 @@ jobs:
       
       - name: Install protoc
         run: |
-          apt-get update
-          apt-get install -y protobuf-compiler
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
       
       - name: Generate protobuf files
         run: protoc --python_out=gen --mypy_out=gen proto/auth.proto
