@@ -17,6 +17,11 @@ jobs:
           python-version: '3.13'
       
       - uses: astral-sh/setup-uv@v3
+      
+      - name: Install protoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
 
       - name: Install Python dependencies
         run: uv sync
@@ -28,7 +33,7 @@ jobs:
               --grpc_python_out=placebrain_contracts \
               --mypy_out=placebrain_contracts \
               proto/auth.proto
-      
+
       - name: Build distribution
         run: uv build
       
