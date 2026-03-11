@@ -8,37 +8,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      
+
       - uses: astral-sh/setup-uv@v3
-      
-      - name: Install protoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y protobuf-compiler
-          which protoc
-          protoc --version
-      
+
       - name: Install Python dependencies
         run: uv sync
-      
-      - name: Debug - Check grpc_tools
-        run: |
-          uv run python -c "import grpc_tools.protoc; print(grpc_tools.protoc.__file__)"
-          uv run which python
-      
+
       - name: Generate protobuf files
-        run: |
-          set -x
-          uv run python -m grpc_tools.protoc \
-            -Iproto \
-            --python_out=placebrain_contracts \
-            --grpc_python_out=placebrain_contracts \
-            proto/auth.proto
-          set +x
+        run: uv run python -m grpc_tools.protoc
+          --proto_path=proto
+          --python_out=./placebrain_contracts
+          --grpc_python_out=./placebrain_contracts
+          --mypy_out=./placebrain_contracts
+          --mypy_grpc_out=./placebrain_contracts
+          proto/*.proto
+
+      - name: Build distribution
+        run: uv build
+
+      - name: Publish to PyPI
+        run: uv publish
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
