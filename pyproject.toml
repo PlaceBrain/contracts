@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "placebrain-contracts"
-version = "0.1.1"
+version = "0.1.2"
 description = "Protocol buffer contracts package"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -13,7 +13,10 @@ dependencies = [
     "grpcio>=1.76.0",
 ]
 
-[tool.hatchling.build.targets.wheel]
+[tool.hatch.build]
+ignore-vcs = true
+
+[tool.hatch.build.targets.wheel]
 packages = ["placebrain_contracts"]
 
 [dependency-groups]
