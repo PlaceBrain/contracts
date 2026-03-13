@@ -61,7 +61,7 @@ wheels = [
 
 [[package]]
 name = "placebrain-contracts"
-version = "0.1.2"
+version = "0.1.4"
 source = { editable = "." }
 dependencies = [
     { name = "grpcio" },

@@ -30,6 +30,9 @@ jobs:
           --mypy_grpc_out=./placebrain_contracts
           proto/*.proto
 
+      - name: Fix gRPC imports for package structure
+        run: sed -i 's/^import \(.*_pb2\)/from placebrain_contracts import \1/' placebrain_contracts/*_grpc.py
+
       - name: Build distribution
         run: uv build
 
