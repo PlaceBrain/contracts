@@ -1,0 +1,403 @@
+syntax = "proto3";
+
+package devices;
+
+service DevicesService {
+  // Devices CRUD
+  rpc CreateDevice(CreateDeviceRequest) returns (CreateDeviceResponse);
+  rpc GetDevice(GetDeviceRequest) returns (GetDeviceResponse);
+  rpc ListDevices(ListDevicesRequest) returns (ListDevicesResponse);
+  rpc UpdateDevice(UpdateDeviceRequest) returns (UpdateDeviceResponse);
+  rpc DeleteDevice(DeleteDeviceRequest) returns (DeleteDeviceResponse);
+  rpc RegenerateDeviceToken(RegenerateDeviceTokenRequest) returns (RegenerateDeviceTokenResponse);
+
+  // Sensors CRUD
+  rpc CreateSensor(CreateSensorRequest) returns (CreateSensorResponse);
+  rpc ListSensors(ListSensorsRequest) returns (ListSensorsResponse);
+  rpc UpdateSensor(UpdateSensorRequest) returns (UpdateSensorResponse);
+  rpc DeleteSensor(DeleteSensorRequest) returns (DeleteSensorResponse);
+
+  // Sensor Thresholds
+  rpc SetThreshold(SetThresholdRequest) returns (SetThresholdResponse);
+  rpc ListThresholds(ListThresholdsRequest) returns (ListThresholdsResponse);
+  rpc DeleteThreshold(DeleteThresholdRequest) returns (DeleteThresholdResponse);
+  rpc GetSensorThresholds(GetSensorThresholdsRequest) returns (GetSensorThresholdsResponse);
+
+  // Actuators CRUD
+  rpc CreateActuator(CreateActuatorRequest) returns (CreateActuatorResponse);
+  rpc ListActuators(ListActuatorsRequest) returns (ListActuatorsResponse);
+  rpc UpdateActuator(UpdateActuatorRequest) returns (UpdateActuatorResponse);
+  rpc DeleteActuator(DeleteActuatorRequest) returns (DeleteActuatorResponse);
+
+  // Commands
+  rpc SendCommand(SendCommandRequest) returns (SendCommandResponse);
+
+  // MQTT auth (internal, for gateway webhook)
+  rpc AuthenticateDevice(AuthenticateDeviceRequest) returns (AuthenticateDeviceResponse);
+  rpc CheckDeviceAcl(CheckDeviceAclRequest) returns (CheckDeviceAclResponse);
+
+  // MQTT credentials for frontend users
+  rpc GenerateMqttCredentials(GenerateMqttCredentialsRequest) returns (GenerateMqttCredentialsResponse);
+
+  // Device status (for collector)
+  rpc UpdateDeviceStatus(UpdateDeviceStatusRequest) returns (UpdateDeviceStatusResponse);
+}
+
+// --- Enums ---
+
+enum DeviceStatus {
+  DEVICE_STATUS_UNSPECIFIED = 0;
+  DEVICE_STATUS_ONLINE = 1;
+  DEVICE_STATUS_OFFLINE = 2;
+}
+
+enum ValueType {
+  VALUE_TYPE_UNSPECIFIED = 0;
+  VALUE_TYPE_NUMBER = 1;
+  VALUE_TYPE_BOOLEAN = 2;
+  VALUE_TYPE_ENUM = 3;
+}
+
+enum ThresholdType {
+  THRESHOLD_TYPE_UNSPECIFIED = 0;
+  THRESHOLD_TYPE_MIN = 1;
+  THRESHOLD_TYPE_MAX = 2;
+}
+
+enum ThresholdSeverity {
+  THRESHOLD_SEVERITY_UNSPECIFIED = 0;
+  THRESHOLD_SEVERITY_WARNING = 1;
+  THRESHOLD_SEVERITY_CRITICAL = 2;
+}
+
+// --- Device messages ---
+
+message DeviceInfo {
+  string device_id = 1;
+  string place_id = 2;
+  string name = 3;
+  DeviceStatus status = 4;
+  string last_seen_at = 5;
+  string created_at = 6;
+  string updated_at = 7;
+  repeated SensorInfo sensors = 8;
+  repeated ActuatorInfo actuators = 9;
+}
+
+message DeviceSummary {
+  string device_id = 1;
+  string place_id = 2;
+  string name = 3;
+  DeviceStatus status = 4;
+  string last_seen_at = 5;
+}
+
+message CreateDeviceRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string name = 3;
+}
+
+message CreateDeviceResponse {
+  string device_id = 1;
+  string token = 2;
+}
+
+message GetDeviceRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+}
+
+message GetDeviceResponse {
+  DeviceInfo device = 1;
+}
+
+message ListDevicesRequest {
+  string user_id = 1;
+  string place_id = 2;
+}
+
+message ListDevicesResponse {
+  repeated DeviceSummary devices = 1;
+}
+
+message UpdateDeviceRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string name = 4;
+}
+
+message UpdateDeviceResponse {
+  string device_id = 1;
+}
+
+message DeleteDeviceRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+}
+
+message DeleteDeviceResponse {
+  bool success = 1;
+}
+
+message RegenerateDeviceTokenRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+}
+
+message RegenerateDeviceTokenResponse {
+  string token = 1;
+}
+
+// --- Sensor messages ---
+
+message SensorInfo {
+  string sensor_id = 1;
+  string device_id = 2;
+  string key = 3;
+  string name = 4;
+  ValueType value_type = 5;
+  string unit_label = 6;
+  int32 precision = 7;
+}
+
+message CreateSensorRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string key = 4;
+  string name = 5;
+  ValueType value_type = 6;
+  string unit_label = 7;
+  int32 precision = 8;
+}
+
+message CreateSensorResponse {
+  string sensor_id = 1;
+}
+
+message ListSensorsRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+}
+
+message ListSensorsResponse {
+  repeated SensorInfo sensors = 1;
+}
+
+message UpdateSensorRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string sensor_id = 4;
+  string name = 5;
+  string unit_label = 6;
+  int32 precision = 7;
+}
+
+message UpdateSensorResponse {
+  string sensor_id = 1;
+}
+
+message DeleteSensorRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string sensor_id = 4;
+}
+
+message DeleteSensorResponse {
+  bool success = 1;
+}
+
+// --- Threshold messages ---
+
+message ThresholdInfo {
+  string threshold_id = 1;
+  string sensor_id = 2;
+  ThresholdType type = 3;
+  double value = 4;
+  ThresholdSeverity severity = 5;
+}
+
+message SetThresholdRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string sensor_id = 4;
+  ThresholdType type = 5;
+  double value = 6;
+  ThresholdSeverity severity = 7;
+}
+
+message SetThresholdResponse {
+  string threshold_id = 1;
+}
+
+message ListThresholdsRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string sensor_id = 4;
+}
+
+message ListThresholdsResponse {
+  repeated ThresholdInfo thresholds = 1;
+}
+
+message DeleteThresholdRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string sensor_id = 4;
+  string threshold_id = 5;
+}
+
+message DeleteThresholdResponse {
+  bool success = 1;
+}
+
+message GetSensorThresholdsRequest {
+  string sensor_id = 1;
+}
+
+message GetSensorThresholdsResponse {
+  repeated ThresholdInfo thresholds = 1;
+}
+
+// --- Actuator messages ---
+
+message ActuatorInfo {
+  string actuator_id = 1;
+  string device_id = 2;
+  string key = 3;
+  string name = 4;
+  ValueType value_type = 5;
+  string unit_label = 6;
+  int32 precision = 7;
+  double min_value = 8;
+  double max_value = 9;
+  double step = 10;
+  repeated string enum_options = 11;
+}
+
+message CreateActuatorRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string key = 4;
+  string name = 5;
+  ValueType value_type = 6;
+  string unit_label = 7;
+  int32 precision = 8;
+  double min_value = 9;
+  double max_value = 10;
+  double step = 11;
+  repeated string enum_options = 12;
+}
+
+message CreateActuatorResponse {
+  string actuator_id = 1;
+}
+
+message ListActuatorsRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+}
+
+message ListActuatorsResponse {
+  repeated ActuatorInfo actuators = 1;
+}
+
+message UpdateActuatorRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string actuator_id = 4;
+  string name = 5;
+  string unit_label = 6;
+  int32 precision = 7;
+  double min_value = 8;
+  double max_value = 9;
+  double step = 10;
+  repeated string enum_options = 11;
+}
+
+message UpdateActuatorResponse {
+  string actuator_id = 1;
+}
+
+message DeleteActuatorRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string actuator_id = 4;
+}
+
+message DeleteActuatorResponse {
+  bool success = 1;
+}
+
+// --- Command messages ---
+
+message SendCommandRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string device_id = 3;
+  string actuator_key = 4;
+  string value = 5;
+}
+
+message SendCommandResponse {
+  bool success = 1;
+}
+
+// --- MQTT auth messages ---
+
+message AuthenticateDeviceRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthenticateDeviceResponse {
+  bool allow = 1;
+}
+
+message CheckDeviceAclRequest {
+  string username = 1;
+  string topic = 2;
+  string action = 3;
+}
+
+message CheckDeviceAclResponse {
+  bool allow = 1;
+}
+
+// --- MQTT credentials ---
+
+message GenerateMqttCredentialsRequest {
+  string user_id = 1;
+}
+
+message GenerateMqttCredentialsResponse {
+  string username = 1;
+  string password = 2;
+  int64 expires_at = 3;
+}
+
+// --- Device status ---
+
+message UpdateDeviceStatusRequest {
+  string device_id = 1;
+  DeviceStatus status = 2;
+}
+
+message UpdateDeviceStatusResponse {
+  bool success = 1;
+}
