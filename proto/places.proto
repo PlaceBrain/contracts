@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package places;
+
+service PlacesService {
+  // Places CRUD
+  rpc CreatePlace(CreatePlaceRequest) returns (CreatePlaceResponse);
+  rpc GetPlace(GetPlaceRequest) returns (GetPlaceResponse);
+  rpc ListPlaces(ListPlacesRequest) returns (ListPlacesResponse);
+  rpc UpdatePlace(UpdatePlaceRequest) returns (UpdatePlaceResponse);
+  rpc DeletePlace(DeletePlaceRequest) returns (DeletePlaceResponse);
+
+  // Members
+  rpc AddMember(AddMemberRequest) returns (AddMemberResponse);
+  rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse);
+  rpc UpdateMemberRole(UpdateMemberRoleRequest) returns (UpdateMemberRoleResponse);
+  rpc ListMembers(ListMembersRequest) returns (ListMembersResponse);
+}
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_OWNER = 1;
+  ROLE_ADMIN = 2;
+  ROLE_VIEWER = 3;
+}
+
+// --- Places ---
+message CreatePlaceRequest {
+  string user_id = 1;
+  string name = 2;
+  string description = 3;
+}
+message CreatePlaceResponse { string place_id = 1; }
+
+message GetPlaceRequest {
+  string user_id = 1;
+  string place_id = 2;
+}
+message GetPlaceResponse {
+  string place_id = 1;
+  string name = 2;
+  string description = 3;
+  Role user_role = 4;
+}
+
+message ListPlacesRequest { string user_id = 1; }
+message ListPlacesResponse {
+  repeated PlaceSummary places = 1;
+}
+message PlaceSummary {
+  string place_id = 1;
+  string name = 2;
+  string description = 3;
+  Role user_role = 4;
+}
+
+message UpdatePlaceRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string name = 3;
+  string description = 4;
+}
+message UpdatePlaceResponse { string place_id = 1; }
+
+message DeletePlaceRequest {
+  string user_id = 1;
+  string place_id = 2;
+}
+message DeletePlaceResponse { bool success = 1; }
+
+// --- Members ---
+message AddMemberRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string target_user_id = 3;
+  Role role = 4;
+}
+message AddMemberResponse { bool success = 1; }
+
+message RemoveMemberRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string target_user_id = 3;
+}
+message RemoveMemberResponse { bool success = 1; }
+
+message UpdateMemberRoleRequest {
+  string user_id = 1;
+  string place_id = 2;
+  string target_user_id = 3;
+  Role role = 4;
+}
+message UpdateMemberRoleResponse { bool success = 1; }
+
+message ListMembersRequest {
+  string user_id = 1;
+  string place_id = 2;
+}
+message ListMembersResponse {
+  repeated MemberInfo members = 1;
+}
+message MemberInfo {
+  string user_id = 1;
+  Role role = 2;
+}
