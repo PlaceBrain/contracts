@@ -41,6 +41,9 @@ service DevicesService {
 
   // Device status (for collector)
   rpc UpdateDeviceStatus(UpdateDeviceStatusRequest) returns (UpdateDeviceStatusResponse);
+
+  // Internal: all thresholds for collector cache
+  rpc GetAllThresholds(GetAllThresholdsRequest) returns (GetAllThresholdsResponse);
 }
 
 // --- Enums ---
@@ -400,4 +403,20 @@ message UpdateDeviceStatusRequest {
 
 message UpdateDeviceStatusResponse {
   bool success = 1;
+}
+
+// --- GetAllThresholds (for collector) ---
+
+message GetAllThresholdsRequest {}
+
+message SensorWithThresholds {
+  string sensor_id = 1;
+  string device_id = 2;
+  string place_id = 3;
+  string key = 4;
+  repeated ThresholdInfo thresholds = 5;
+}
+
+message GetAllThresholdsResponse {
+  repeated SensorWithThresholds sensors = 1;
 }
