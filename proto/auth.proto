@@ -8,6 +8,7 @@ service AuthService {
     rpc RefreshTokens(RefreshTokensRequest) returns (RefreshTokensResponse);
     rpc Logout(LogoutRequest) returns (LogoutResponse);
     rpc GetMe(GetMeRequest) returns (GetMeResponse);
+    rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
     rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
 }
 
@@ -57,6 +58,16 @@ message GetMeResponse {
     string username = 2;
     string email = 3;
     bool is_verified = 4;
+}
+
+message GetUserByEmailRequest {
+    string email = 1;
+}
+
+message GetUserByEmailResponse {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
 }
 
 message ValidateTokenRequest {
