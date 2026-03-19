@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package collector;
+
+import "google/protobuf/timestamp.proto";
+
+service CollectorService {
+  rpc GetLatestReadings(GetLatestReadingsRequest) returns (GetLatestReadingsResponse);
+}
+
+message GetLatestReadingsRequest {
+  string device_id = 1;
+}
+
+message SensorReading {
+  string key = 1;
+  double value = 2;
+  google.protobuf.Timestamp time = 3;
+}
+
+message GetLatestReadingsResponse {
+  repeated SensorReading readings = 1;
+}
