@@ -42,6 +42,9 @@ service DevicesService {
   // Device status (for collector)
   rpc UpdateDeviceStatus(UpdateDeviceStatusRequest) returns (UpdateDeviceStatusResponse);
 
+  // Internal: delete all devices by place (for gateway cascade)
+  rpc DeleteDevicesByPlace(DeleteDevicesByPlaceRequest) returns (DeleteDevicesByPlaceResponse);
+
   // Internal: all thresholds for collector cache
   rpc GetAllThresholds(GetAllThresholdsRequest) returns (GetAllThresholdsResponse);
 }
@@ -403,6 +406,18 @@ message UpdateDeviceStatusRequest {
 
 message UpdateDeviceStatusResponse {
   bool success = 1;
+}
+
+// --- DeleteDevicesByPlace (internal) ---
+
+message DeleteDevicesByPlaceRequest {
+  string place_id = 1;
+}
+
+message DeleteDevicesByPlaceResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+  repeated string device_ids = 3;
 }
 
 // --- GetAllThresholds (for collector) ---
