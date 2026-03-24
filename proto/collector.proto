@@ -7,6 +7,7 @@ import "google/protobuf/timestamp.proto";
 service CollectorService {
   rpc GetLatestReadings(GetLatestReadingsRequest) returns (GetLatestReadingsResponse);
   rpc DeleteReadings(DeleteReadingsRequest) returns (DeleteReadingsResponse);
+  rpc GetReadings(GetReadingsRequest) returns (GetReadingsResponse);
 }
 
 message GetLatestReadingsRequest {
@@ -29,4 +30,31 @@ message DeleteReadingsRequest {
 
 message DeleteReadingsResponse {
   bool success = 1;
+}
+
+// --- Historical readings ---
+
+message GetReadingsRequest {
+  string device_id = 1;
+  repeated string keys = 2;
+  google.protobuf.Timestamp from = 3;
+  google.protobuf.Timestamp to = 4;
+  int32 interval_seconds = 5;
+}
+
+message AggregatedReading {
+  google.protobuf.Timestamp time = 1;
+  optional double avg = 2;
+  optional double min = 3;
+  optional double max = 4;
+}
+
+message KeyReadings {
+  string key = 1;
+  repeated AggregatedReading points = 2;
+  repeated SensorReading raw_points = 3;
+}
+
+message GetReadingsResponse {
+  repeated KeyReadings series = 1;
 }
