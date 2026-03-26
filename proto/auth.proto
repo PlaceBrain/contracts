@@ -10,6 +10,8 @@ service AuthService {
     rpc GetMe(GetMeRequest) returns (GetMeResponse);
     rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
     rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+    rpc SendOtp(SendOtpRequest) returns (SendOtpResponse);
+    rpc VerifyOtp(VerifyOtpRequest) returns (VerifyOtpResponse);
 }
 
 message RegisterRequest {
@@ -79,4 +81,21 @@ message ValidateTokenResponse {
     string user_id = 2;
     string email = 3;
     string username = 4;
+}
+
+message SendOtpRequest {
+    string email = 1;
+}
+
+message SendOtpResponse {
+    bool success = 1;
+}
+
+message VerifyOtpRequest {
+    string email = 1;
+    string code = 2;
+}
+
+message VerifyOtpResponse {
+    bool success = 1;
 }
