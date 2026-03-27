@@ -45,6 +45,9 @@ service DevicesService {
   // Internal: delete all devices by place (for gateway cascade)
   rpc DeleteDevicesByPlace(DeleteDevicesByPlaceRequest) returns (DeleteDevicesByPlaceResponse);
 
+  // Internal: invalidate cached MQTT credentials (for gateway)
+  rpc InvalidateMqttCredentials(InvalidateMqttCredentialsRequest) returns (InvalidateMqttCredentialsResponse);
+
   // Internal: all thresholds for collector cache
   rpc GetAllThresholds(GetAllThresholdsRequest) returns (GetAllThresholdsResponse);
 }
@@ -434,4 +437,14 @@ message SensorWithThresholds {
 
 message GetAllThresholdsResponse {
   repeated SensorWithThresholds sensors = 1;
+}
+
+// --- InvalidateMqttCredentials (internal) ---
+
+message InvalidateMqttCredentialsRequest {
+  repeated string user_ids = 1;
+}
+
+message InvalidateMqttCredentialsResponse {
+  bool success = 1;
 }
