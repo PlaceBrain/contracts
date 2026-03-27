@@ -125,10 +125,13 @@ message GetDeviceResponse {
 message ListDevicesRequest {
   string user_id = 1;
   string place_id = 2;
+  int32 page = 3;
+  int32 per_page = 4;
 }
 
 message ListDevicesResponse {
   repeated DeviceSummary devices = 1;
+  int32 total = 2;
 }
 
 message UpdateDeviceRequest {
