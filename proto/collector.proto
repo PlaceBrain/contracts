@@ -6,7 +6,6 @@ import "google/protobuf/timestamp.proto";
 
 service CollectorService {
   rpc GetLatestReadings(GetLatestReadingsRequest) returns (GetLatestReadingsResponse);
-  rpc DeleteReadings(DeleteReadingsRequest) returns (DeleteReadingsResponse);
   rpc GetReadings(GetReadingsRequest) returns (GetReadingsResponse);
 }
 
@@ -22,14 +21,6 @@ message SensorReading {
 
 message GetLatestReadingsResponse {
   repeated SensorReading readings = 1;
-}
-
-message DeleteReadingsRequest {
-  repeated string device_ids = 1;
-}
-
-message DeleteReadingsResponse {
-  bool success = 1;
 }
 
 // --- Historical readings ---

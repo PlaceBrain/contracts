@@ -39,17 +39,8 @@ service DevicesService {
   // MQTT credentials for frontend users
   rpc GenerateMqttCredentials(GenerateMqttCredentialsRequest) returns (GenerateMqttCredentialsResponse);
 
-  // Device status (for collector)
-  rpc UpdateDeviceStatus(UpdateDeviceStatusRequest) returns (UpdateDeviceStatusResponse);
-
-  // Internal: delete all devices by place (for gateway cascade)
+  // Internal: delete all devices by place (called by Kafka consumer internally)
   rpc DeleteDevicesByPlace(DeleteDevicesByPlaceRequest) returns (DeleteDevicesByPlaceResponse);
-
-  // Internal: invalidate cached MQTT credentials (for gateway)
-  rpc InvalidateMqttCredentials(InvalidateMqttCredentialsRequest) returns (InvalidateMqttCredentialsResponse);
-
-  // Internal: all thresholds for collector cache
-  rpc GetAllThresholds(GetAllThresholdsRequest) returns (GetAllThresholdsResponse);
 }
 
 // --- Enums ---
@@ -403,17 +394,6 @@ message GenerateMqttCredentialsResponse {
   int64 expires_at = 3;
 }
 
-// --- Device status ---
-
-message UpdateDeviceStatusRequest {
-  string device_id = 1;
-  DeviceStatus status = 2;
-}
-
-message UpdateDeviceStatusResponse {
-  bool success = 1;
-}
-
 // --- DeleteDevicesByPlace (internal) ---
 
 message DeleteDevicesByPlaceRequest {
@@ -426,28 +406,3 @@ message DeleteDevicesByPlaceResponse {
   repeated string device_ids = 3;
 }
 
-// --- GetAllThresholds (for collector) ---
-
-message GetAllThresholdsRequest {}
-
-message SensorWithThresholds {
-  string sensor_id = 1;
-  string device_id = 2;
-  string place_id = 3;
-  string key = 4;
-  repeated ThresholdInfo thresholds = 5;
-}
-
-message GetAllThresholdsResponse {
-  repeated SensorWithThresholds sensors = 1;
-}
-
-// --- InvalidateMqttCredentials (internal) ---
-
-message InvalidateMqttCredentialsRequest {
-  repeated string user_ids = 1;
-}
-
-message InvalidateMqttCredentialsResponse {
-  bool success = 1;
-}

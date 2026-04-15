@@ -1,4 +1,3 @@
-from placebrain_contracts.events.auth import UserUpdated
 from placebrain_contracts.events.base import BaseEvent
 from placebrain_contracts.events.devices import (
     DeviceDeleted,
@@ -25,5 +24,4 @@ __all__ = [
     "ThresholdCreated",
     "ThresholdDeleted",
     "ThresholdUpdated",
-    "UserUpdated",
 ]
