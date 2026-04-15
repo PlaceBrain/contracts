@@ -19,18 +19,18 @@ class ThresholdCreated(BaseEvent):
     event_type: Literal["threshold.created"] = "threshold.created"
     sensor_id: UUID
     threshold_id: UUID
-    threshold_type: str
+    threshold_type: Literal["min", "max"]
     value: float
-    severity: str
+    severity: Literal["warning", "critical"]
 
 
 class ThresholdUpdated(BaseEvent):
     event_type: Literal["threshold.updated"] = "threshold.updated"
     sensor_id: UUID
     threshold_id: UUID
-    threshold_type: str
+    threshold_type: Literal["min", "max"]
     value: float
-    severity: str
+    severity: Literal["warning", "critical"]
 
 
 class ThresholdDeleted(BaseEvent):

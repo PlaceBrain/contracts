@@ -8,7 +8,7 @@ class MemberAdded(BaseEvent):
     event_type: Literal["member.added"] = "member.added"
     place_id: UUID
     user_id: UUID
-    role: str
+    role: Literal["owner", "admin", "viewer"]
 
 
 class MemberRemoved(BaseEvent):
@@ -21,7 +21,7 @@ class MemberRoleChanged(BaseEvent):
     event_type: Literal["member.role_changed"] = "member.role_changed"
     place_id: UUID
     user_id: UUID
-    role: str
+    role: Literal["owner", "admin", "viewer"]
 
 
 class PlaceDeleted(BaseEvent):
