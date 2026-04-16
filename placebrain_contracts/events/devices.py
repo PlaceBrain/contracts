@@ -18,6 +18,8 @@ class DevicesBulkDeleted(BaseEvent):
 class ThresholdCreated(BaseEvent):
     event_type: Literal["threshold.created"] = "threshold.created"
     sensor_id: UUID
+    device_id: UUID
+    key: str
     threshold_id: UUID
     threshold_type: Literal["min", "max"]
     value: float
@@ -36,4 +38,6 @@ class ThresholdUpdated(BaseEvent):
 class ThresholdDeleted(BaseEvent):
     event_type: Literal["threshold.deleted"] = "threshold.deleted"
     sensor_id: UUID
+    device_id: UUID
+    key: str
     threshold_id: UUID
