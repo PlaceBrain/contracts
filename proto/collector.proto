@@ -7,6 +7,11 @@ import "google/protobuf/timestamp.proto";
 service CollectorService {
   rpc GetLatestReadings(GetLatestReadingsRequest) returns (GetLatestReadingsResponse);
   rpc GetReadings(GetReadingsRequest) returns (GetReadingsResponse);
+
+  // Alerts
+  rpc GetAlerts(GetAlertsRequest) returns (GetAlertsResponse);
+  rpc GetAlertCounts(GetAlertCountsRequest) returns (GetAlertCountsResponse);
+  rpc ResolveAlert(ResolveAlertRequest) returns (ResolveAlertResponse);
 }
 
 message GetLatestReadingsRequest {
@@ -48,4 +53,74 @@ message KeyReadings {
 
 message GetReadingsResponse {
   repeated KeyReadings series = 1;
+}
+
+// --- Alerts ---
+
+enum AlertThresholdType {
+  ALERT_THRESHOLD_TYPE_UNSPECIFIED = 0;
+  ALERT_THRESHOLD_TYPE_MIN = 1;
+  ALERT_THRESHOLD_TYPE_MAX = 2;
+}
+
+enum AlertSeverity {
+  ALERT_SEVERITY_UNSPECIFIED = 0;
+  ALERT_SEVERITY_WARNING = 1;
+  ALERT_SEVERITY_CRITICAL = 2;
+}
+
+enum AlertStatus {
+  ALERT_STATUS_UNSPECIFIED = 0;
+  ALERT_STATUS_ACTIVE = 1;
+  ALERT_STATUS_RESOLVED = 2;
+}
+
+message Alert {
+  string id = 1;
+  string sensor_id = 2;
+  string threshold_id = 3;
+  string device_id = 4;
+  string place_id = 5;
+  string key = 6;
+  double value = 7;
+  double threshold_value = 8;
+  AlertThresholdType threshold_type = 9;
+  AlertSeverity severity = 10;
+  AlertStatus status = 11;
+  google.protobuf.Timestamp created_at = 12;
+  optional google.protobuf.Timestamp resolved_at = 13;
+}
+
+message GetAlertsRequest {
+  string place_id = 1;
+  optional AlertStatus status = 2;
+  optional AlertSeverity severity = 3;
+  optional string sensor_id = 4;
+  optional string device_id = 5;
+  optional google.protobuf.Timestamp from = 6;
+  optional google.protobuf.Timestamp to = 7;
+  int32 page = 8;
+  int32 per_page = 9;
+}
+
+message GetAlertsResponse {
+  repeated Alert items = 1;
+  int32 total = 2;
+}
+
+message GetAlertCountsRequest {
+  repeated string place_id = 1;
+}
+
+message GetAlertCountsResponse {
+  map<string, int32> unresolved_by_place = 1;
+  int32 total_unresolved = 2;
+}
+
+message ResolveAlertRequest {
+  string alert_id = 1;
+}
+
+message ResolveAlertResponse {
+  Alert alert = 1;
 }
