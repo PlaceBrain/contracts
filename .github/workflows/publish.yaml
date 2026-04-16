@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'proto/**'
+      - 'placebrain_contracts/events/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - '.github/workflows/publish.yaml'
 
 jobs:
   build:
