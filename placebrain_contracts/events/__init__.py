@@ -15,8 +15,8 @@ from placebrain_contracts.events.places import (
 from placebrain_contracts.events.telemetry import (
     DeviceStatusPayload,
     EmqxStatusMessage,
-    EmqxTelemetryMessage,
     TelemetryPayload,
+    TelemetryReading,
 )
 from placebrain_contracts.events.topics import (
     TOPIC_DEVICE_DELETED,
@@ -37,7 +37,6 @@ __all__ = [
     "DevicesBulkDeleted",
     "DeviceStatusPayload",
     "EmqxStatusMessage",
-    "EmqxTelemetryMessage",
     "MemberAdded",
     "MemberRemoved",
     "MemberRoleChanged",
@@ -53,6 +52,7 @@ __all__ = [
     "TOPIC_THRESHOLD_CREATED",
     "TOPIC_THRESHOLD_DELETED",
     "TelemetryPayload",
+    "TelemetryReading",
     "ThresholdCreated",
     "ThresholdDeleted",
     "ThresholdUpdated",
