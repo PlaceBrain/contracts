@@ -10,10 +10,11 @@ class TelemetryPayload(BaseModel):
     values: dict[str, float]
 
 
-class EmqxTelemetryMessage(BaseModel):
-    """Message format from EMQX Kafka bridge for telemetry.readings topic."""
+class TelemetryReading(BaseModel):
+    """Domain event for a telemetry reading published to telemetry.readings."""
 
-    topic: str
+    place_id: str
+    device_id: str
     payload: TelemetryPayload
 
     @field_validator("payload", mode="before")
@@ -22,14 +23,6 @@ class EmqxTelemetryMessage(BaseModel):
         if isinstance(v, str):
             return json.loads(v)
         return v
-
-    def extract_ids(self) -> tuple[str, str]:
-        """Extract (place_id, device_id) from MQTT topic.
-
-        Topic format: placebrain/{place_id}/devices/{device_id}/telemetry
-        """
-        parts = self.topic.split("/")
-        return parts[1], parts[3]
 
 
 class DeviceStatusPayload(BaseModel):
